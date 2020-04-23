@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.CourseMapper">
+    <select id="findCourseById" parameterType="Integer" resultType="Course">
+        select * from t_course where id = #{id}
+    </select>
+    <select id="selectCourse" parameterType="Integer" resultType="Course">
+        select * from t_course where stu_id = #{id}
+    </select>
+</mapper>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.niit.mapper.PersonMapper">
+   <!-- 个人信息结果集 -->
+   <!-- 嵌套查询方式 -->
+   <select id="getPersonInfo" parameterType="Integer" resultMap="personInfo">
+       SELECT * FROM tb_person WHERE id=#{id}
+   </select>
+   <resultMap type="Map" id="personInfo">
+       <id property="id" column="id"/>
+       <result property="name" column="name"/>
+       <result property="age" column="age"/>
+       <result property="sex" column="sex"/>
+       <association property="card" column="card_id" javaType="IdCard" select="getCard"/>
+   </resultMap>
+   
+   <select id="getCard" parameterType="Integer" resultType="IdCard">
+       SELECT * FROM tb_idcard WHERE id=#{id}
+   </select>
+   
+   <!-- 嵌套结果方式，可以理解为封装联表查询的数据（去除重复的数据） -->
+   <select id="getPersonInfo1" parameterType="Integer" resultMap="personInfo1">
+       SELECT p.*, idcard.code
+       from tb_person p, tb_idcard idcard
+       where p.card_id=idcard.id
+       and p.id = #{id}
+   </select>
+   <resultMap type="Map" id="personInfo1">
+       <id property="id" column="id"/>
+       <result property="name" column="name"/>
+       <result property="age" column="age"/>
+       <result property="sex" column="sex"/>
+       <association property="card" column="card_id" javaType="IdCard">
+           <id property="id" column="card_id"/>
+           <result property="code" column="code"/>
+       </association>
+   </resultMap>
+</mapper>
